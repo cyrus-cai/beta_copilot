@@ -5,6 +5,9 @@ import { Button } from "@geist-ui/core";
 const HeaderComponent = () => {
   return (
     <div>
+      <div>Beta_Copilot Store</div>
+      <div>switch to mine</div>
+      <Link href="./">Go to Index Page</Link>
       <Link href="./mine">Go to About Page</Link>
       <Button
         onClick={() => {

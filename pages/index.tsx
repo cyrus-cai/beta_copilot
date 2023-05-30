@@ -17,8 +17,6 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>Beta_Copilot Store</div>
-      <div>switch to mine</div>
       <HeaderComponent />
       <SearchComponent />
       <CardComponent
@@ -27,6 +25,7 @@ export default function Home() {
         description={""}
         link={""}
         statues={""}
+        createdAt={""}
       />
     </>
   );

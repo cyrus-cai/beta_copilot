@@ -1,4 +1,4 @@
-import { Card, Text, Image, Link } from "@geist-ui/core";
+import { Card, Image, Link, Text } from "@geist-ui/core";
 
 interface CardProps {
   imageSrc: string;
@@ -6,6 +6,8 @@ interface CardProps {
   description: string;
   link: string;
   statues: string;
+  createdAt: string;
+  expiredAt?: string;
 }
 
 const CardComponent: React.FC<CardProps> = () => {
