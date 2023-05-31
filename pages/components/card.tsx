@@ -1,6 +1,7 @@
 import { Card, Image, Link, Text } from "@geist-ui/core";
 
 interface CardProps {
+  type: "store" | "mine";
   imageSrc: string;
   title: string;
   description: string;
