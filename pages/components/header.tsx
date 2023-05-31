@@ -7,8 +7,7 @@ const isApp = mincuCore.isApp;
 const HeaderComponent = () => {
   return (
     <div>
-      <div>Beta_Copilot Store</div>
-      <div>switch to mine</div>
+      <h2>Beta_Copilot</h2>
       <Link href="./">Go to Index Page</Link>
       {isApp ? (
         <Link href="./mine">Go to My Page</Link>
@@ -23,17 +22,6 @@ const HeaderComponent = () => {
           Go to My Page
         </Button>
       )}
-
-      <Button
-        onClick={() => {
-          window.location.href = `incu://Webview?url=${encodeURIComponent(
-            "http://localhost:3000"
-          )}`;
-          // window.location.href = "incu://Webview?url=https://incu.ncuos.com/";
-        }}
-      >
-        open iNCU
-      </Button>
     </div>
   );
 };
