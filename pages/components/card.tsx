@@ -1,17 +1,22 @@
-import { Card, Image, Link, Text } from "@geist-ui/core";
+import { Button, Card, Image, Link, Text } from "@geist-ui/core";
 
 interface CardProps {
-  type: "store" | "mine";
-  imageSrc: string;
-  title: string;
-  description: string;
-  link: string;
-  statues: string;
-  createdAt: string;
-  expiredAt?: string;
+  imageSrc: String;
+  title: String;
+  description: String;
+  url: String;
+  AppStatus: number;
+  createdAt?: String;
+  handleAdd?: () => Promise<void>;
 }
 
-const CardComponent: React.FC<CardProps> = () => {
+const CardComponent: React.FC<CardProps> = ({
+  imageSrc,
+  title,
+  description,
+  url,
+  AppStatus,
+}) => {
   return (
     <Card width="400px">
       <Image
@@ -21,19 +26,15 @@ const CardComponent: React.FC<CardProps> = () => {
         draggable={false}
       />
       <Text h4 mb={0}>
-        Geist UI React
+        {title}
       </Text>
       <Text type="secondary" small>
-        Modern and minimalist React UI library.
+        {description}
       </Text>
       <Card.Footer>
-        <Link
-          block
-          target="_blank"
-          href="https://github.com/geist-org/geist-ui"
-        >
-          Visit source code on GitHub.
-        </Link>
+        <Button auto type="success" scale={0.35}>
+          Add to My Space
+        </Button>
       </Card.Footer>
     </Card>
   );

@@ -9,7 +9,8 @@ const HeaderComponent = () => {
     <div>
       <h2>Beta_Copilot</h2>
       <Link href="./">Go to Index Page</Link>
-      {isApp ? (
+      <Link href="./mine">Go to My Page</Link>
+      {/* {isApp ? (
         <Link href="./mine">Go to My Page</Link>
       ) : (
         <Button
@@ -21,7 +22,7 @@ const HeaderComponent = () => {
         >
           Go to My Page
         </Button>
-      )}
+      )} */}
     </div>
   );
 };
