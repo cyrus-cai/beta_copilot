@@ -1,11 +1,18 @@
 import { GeistProvider, CssBaseline } from "@geist-ui/core";
 import { AppProps } from "next/app";
+import React, { useEffect } from "react";
 
-type MyAppProps = AppProps & {
-  // Add any custom props here
-};
+const App = ({ Component, pageProps }: AppProps) => {
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      if (typeof window !== "undefined") {
+        import("vconsole").then(({ default: VConsole }) => {
+          new VConsole();
+        });
+      }
+    }
+  }, []);
 
-const App = ({ Component, pageProps }: MyAppProps) => {
   return (
     <GeistProvider>
       <CssBaseline />
