@@ -4,6 +4,7 @@ import { Button } from "@geist-ui/core";
 import CardComponent from "./components/card";
 import HeaderComponent from "./components/header";
 import { dataModule } from "mincu-react";
+import { useMicroAppsStore } from '../stores/useMicroAppStore';
 
 interface AppProps {
   id: number;
@@ -18,24 +19,13 @@ interface AppProps {
 const Mine = () => {
   const userId = dataModule.userInfo.profile.entireProfile?.base_info?.xh;
 
-  const [myMicroApps, setMyMicroApps] = useState([]);
-
-  console.log(myMicroApps);
+  const { myMicroApps, fetchMyMicroApps } = useMicroAppsStore();
 
   useEffect(() => {
-    fetch("/api/myAppInfo", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Mydata", data);
-        setMyMicroApps(data);
-      });
-  }, [userId]);
+    if (userId) {
+      fetchMyMicroApps(userId);
+    }
+  }, [userId, fetchMyMicroApps]);
 
   return (
     <div>

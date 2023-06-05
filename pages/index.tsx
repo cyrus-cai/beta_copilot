@@ -7,7 +7,7 @@ import HeaderComponent from "./components/header";
 import { Inter } from "@next/font/google";
 import NonSSRWrapper from "./utils/no-ssr-wrapper";
 import SearchComponent from "./components/search";
-import { useMicroAppsStore } from '../stores/microAppsStore';
+import { useMicroAppsStore } from '../stores/useMicroAppStore';
 
 const inter = Inter({ subsets: ["latin"] });
 interface AppProps {
