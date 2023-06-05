@@ -1,9 +1,9 @@
-import { dataModule, mincuCore } from "mincu-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@geist-ui/core";
 import CardComponent from "./components/card";
 import HeaderComponent from "./components/header";
+import { dataModule } from "mincu-react";
 
 interface AppProps {
   id: number;
@@ -35,7 +35,7 @@ const Mine = () => {
         console.log("Mydata", data);
         setMyMicroApps(data);
       });
-  }, []);
+  }, [userId]);
 
   return (
     <div>

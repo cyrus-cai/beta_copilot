@@ -5,9 +5,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const myAppInfoHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  // Get userID from the request
-  const userID = 5701119201;
-  // const userID = req.body.userId;
+  const userID = req.body.userId;
+  console.log(userID);
 
   if (!userID) {
     res.status(400).json({ message: "No userID provided" });
