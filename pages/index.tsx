@@ -22,6 +22,7 @@ interface AppProps {
 
 export default function Home() {
   const { microApps, fetchMicroApps } = useMicroAppsStore();
+  const [isLoading, setIsLoading] = useState(false);
   const userId = dataModule.userInfo.profile.entireProfile?.base_info?.xh ?? "";
 
   useEffect(() => {
@@ -31,6 +32,13 @@ export default function Home() {
   }, []);
 
   async function handleAdd(microApp: AppProps) {
+    if (isLoading) {
+      const notifyConflict = toast.error('please waiting until current request finished...');
+      { notifyConflict }
+      return;
+    }
+    setIsLoading(true);
+
     toast.promise(
       (async () => {
         const response = await fetch("/api/updateUserApp", {
@@ -42,7 +50,7 @@ export default function Home() {
         if (!response.ok) {
           throw new Error("Error while adding the microApp to the user.");
         }
-
+        setIsLoading(false);
         return response;
       })(),
       {
