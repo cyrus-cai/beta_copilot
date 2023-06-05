@@ -1,3 +1,4 @@
+import toast, { Toaster } from 'react-hot-toast';
 import { useEffect, useState } from "react";
 
 import { Button } from "@geist-ui/core";
@@ -19,21 +20,36 @@ interface AppProps {
 const Mine = () => {
   const userId = dataModule.userInfo.profile.entireProfile?.base_info?.xh;
 
-  const { myMicroApps, fetchMyMicroApps } = useMicroAppsStore();
+  const { myMicroApps, fetchMyMicroApps, removeMicroApp } = useMicroAppsStore();
 
   async function handleRemove(microApp: AppProps) {
-    const response = await fetch("/api/updateUserApp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: userId, microAppId: microApp.id, action: "remove" }),
-    });
+    toast.promise(
+      (async () => {
+        const response = await fetch("/api/updateUserApp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: userId, microAppId: microApp.id, action: "remove" }),
+        });
 
-    if (!response.ok) {
-      // Handle error
-      console.error("Error while adding the microApp to the user.");
-      return;
-    }
+        if (!response.ok) {
+          throw new Error("Error while removing the microApp from the user.");
+        }
+
+        removeMicroApp(microApp);
+
+        return response;
+      })(),
+      {
+        loading: 'Processing...',
+        success: 'Successful Removed',
+        error: 'Remove Failed',
+      }
+    );
   }
+
+  useEffect(() => {
+    console.log(myMicroApps);
+  }, [myMicroApps]);
 
   useEffect(() => {
     if (userId) {
@@ -57,6 +73,7 @@ const Mine = () => {
         />
       ))}
       <Button onClick={() => { console.log(userId) }}>test xh get</Button>
+      <Toaster />
     </div>
   );
 };

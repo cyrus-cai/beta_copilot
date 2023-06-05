@@ -1,4 +1,5 @@
 import { dataModule, mincuCore } from "mincu-react";
+import toast, { Toaster } from 'react-hot-toast';
 import { useEffect, useState } from "react";
 
 import CardComponent from "./components/card";
@@ -9,7 +10,6 @@ import NonSSRWrapper from "./utils/no-ssr-wrapper";
 import SearchComponent from "./components/search";
 import { useMicroAppsStore } from '../stores/useMicroAppStore';
 
-const inter = Inter({ subsets: ["latin"] });
 interface AppProps {
   id: number;
   name: String;
@@ -31,17 +31,26 @@ export default function Home() {
   }, []);
 
   async function handleAdd(microApp: AppProps) {
-    const response = await fetch("/api/updateUserApp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: userId, microAppId: microApp.id, action: "add" }),
-    });
+    toast.promise(
+      (async () => {
+        const response = await fetch("/api/updateUserApp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: userId, microAppId: microApp.id, action: "add" }),
+        });
 
-    if (!response.ok) {
-      // Handle error
-      console.error("Error while adding the microApp to the user.");
-      return;
-    }
+        if (!response.ok) {
+          throw new Error("Error while adding the microApp to the user.");
+        }
+
+        return response;
+      })(),
+      {
+        loading: 'Processing...',
+        success: 'Successful Added',
+        error: 'Add Failed',
+      }
+    );
   }
 
   return (
@@ -66,6 +75,7 @@ export default function Home() {
             handleAdd={() => handleAdd(data)}
           />
         ))}
+        <Toaster />
       </NonSSRWrapper>
     </>
   );

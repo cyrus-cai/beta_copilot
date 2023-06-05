@@ -16,6 +16,7 @@ interface State {
     myMicroApps: AppProps[];
     setMicroApps: (microApps: AppProps[]) => void;
     setMyMicroApps: (myMicroApps: AppProps[]) => void;
+    removeMicroApp: (microApps: AppProps) => void;
     fetchMicroApps: () => Promise<void>;
     fetchMyMicroApps: (userId: string) => Promise<void>;
 }
@@ -25,6 +26,9 @@ export const useMicroAppsStore = create<State>((set) => ({
     myMicroApps: [],
     setMicroApps: (microApps) => set({ microApps }),
     setMyMicroApps: (myMicroApps) => set({ myMicroApps }),
+    removeMicroApp: (microApp) => set(state => ({
+        myMicroApps: state.myMicroApps.filter(app => app.id !== microApp.id)
+    })),
     fetchMicroApps: async () => {
         try {
             const response = await fetch("/api/appInfo");
