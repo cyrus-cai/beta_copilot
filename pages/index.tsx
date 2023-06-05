@@ -30,11 +30,11 @@ export default function Home() {
     }
   }, []);
 
-  async function handleAdd(microApps: AppProps) {
+  async function handleAdd(microApp: AppProps) {
     const response = await fetch("/api/updateUserApp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: userId, microApps }),
+      body: JSON.stringify({ userId: userId, microAppId: microApp.id, action: "add" }),
     });
 
     if (!response.ok) {

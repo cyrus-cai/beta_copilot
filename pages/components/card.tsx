@@ -8,14 +8,16 @@ interface CardProps {
   AppStatus: number;
   createdAt?: String;
   handleAdd?: () => Promise<void>;
+  handleRemove?: () => Promise<void>;
 }
 
 const CardComponent: React.FC<CardProps> = ({
   imageSrc,
   title,
   description,
-  url,
   AppStatus,
+  handleAdd,
+  handleRemove,
 }) => {
   return (
     <Card width="400px">
@@ -24,6 +26,7 @@ const CardComponent: React.FC<CardProps> = ({
         height="200px"
         width="400px"
         draggable={false}
+        alt="image"
       />
       <Text h4 mb={0}>
         {title}
@@ -31,11 +34,16 @@ const CardComponent: React.FC<CardProps> = ({
       <Text type="secondary" small>
         {description}
       </Text>
-      <Card.Footer>
-        <Button auto type="success" scale={0.35}>
+      {handleAdd && <Card.Footer>
+        <Button auto type="success" scale={0.35} onClick={handleAdd}>
           Add to My Space
         </Button>
-      </Card.Footer>
+      </Card.Footer>}
+      {handleRemove && <Card.Footer>
+        <Button auto type="error" scale={0.35} onClick={handleRemove}>
+          Remove from My Space
+        </Button>
+      </Card.Footer>}
     </Card>
   );
 };

@@ -21,6 +21,20 @@ const Mine = () => {
 
   const { myMicroApps, fetchMyMicroApps } = useMicroAppsStore();
 
+  async function handleRemove(microApp: AppProps) {
+    const response = await fetch("/api/updateUserApp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: userId, microAppId: microApp.id, action: "remove" }),
+    });
+
+    if (!response.ok) {
+      // Handle error
+      console.error("Error while adding the microApp to the user.");
+      return;
+    }
+  }
+
   useEffect(() => {
     if (userId) {
       fetchMyMicroApps(userId);
@@ -39,6 +53,7 @@ const Mine = () => {
           description={data.description}
           url={data.url}
           AppStatus={data.status}
+          handleRemove={() => handleRemove(data)}
         />
       ))}
       <Button onClick={() => { console.log(userId) }}>test xh get</Button>
