@@ -1,4 +1,4 @@
-[Next.js](https://nextjs.org/) + [Tailwind CSS](https://tailwindcss.com/) + [Geist UI](https://geist-ui.dev/en-us)
+[Next.js](https://nextjs.org/) + [Tailwind CSS](https://tailwindcss.com/) + [Geist UI](https://geist-ui.dev/en-us) +[zustand](https://zustand-demo.pmnd.rs/)
 
 ## Getting Started
 

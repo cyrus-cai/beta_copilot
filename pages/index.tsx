@@ -1,13 +1,13 @@
+import { dataModule, mincuCore } from "mincu-react";
+import { useEffect, useState } from "react";
+
 import CardComponent from "./components/card";
 import Head from "next/head";
 import HeaderComponent from "./components/header";
+import { Inter } from "@next/font/google";
 import NonSSRWrapper from "./utils/no-ssr-wrapper";
 import SearchComponent from "./components/search";
-import { Inter } from "@next/font/google";
-import { useEffect, useState } from "react";
-
-import { mincuCore, dataModule } from "mincu-react";
-const isApp = mincuCore.isApp;
+import { useMicroAppsStore } from '../stores/microAppsStore';
 
 const inter = Inter({ subsets: ["latin"] });
 interface AppProps {
@@ -21,13 +21,13 @@ interface AppProps {
 }
 
 export default function Home() {
-  const [microApps, setMicroApps] = useState([]);
+  const { microApps, fetchMicroApps } = useMicroAppsStore();
   const userId = dataModule.userInfo.profile.entireProfile?.base_info?.xh ?? "";
 
   useEffect(() => {
-    fetch("/api/appInfo")
-      .then((response) => response.json())
-      .then((data) => setMicroApps(data));
+    if (!microApps.length) {
+      fetchMicroApps();
+    }
   }, []);
 
   async function handleAdd(microApps: AppProps) {
