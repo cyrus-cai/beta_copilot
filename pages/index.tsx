@@ -1,4 +1,4 @@
-import { Button, Input, Spacer } from "@geist-ui/core";
+import { Button, Input, Modal, Spacer, useModal } from "@geist-ui/core";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 
@@ -25,6 +25,14 @@ export default function Home() {
   const [linkCode, setLinkCode] = useState("");
   const userId = dataModule.userInfo.profile.entireProfile?.base_info?.xh ?? "";
   // const userId = "5701119201";
+  const { visible, setVisible, bindings } = useModal()
+
+  useEffect(() => {
+    // 获取URL的查询参数
+    const urlParams = new URLSearchParams(window.location.search);
+    setLinkCode(urlParams.get('lc') ?? "");
+    urlParams.get('lc') && setVisible(true)
+  }, []);
 
   const addBySearch = () => {
     const asyncFunction = async () => {
@@ -144,6 +152,17 @@ export default function Home() {
           />
         ))}
         <Toaster />
+        <Modal {...bindings}>
+          <Modal.Title>Confirm add?</Modal.Title>
+          <Modal.Content>
+            <p>You are using a url to add a Beta MicroApp</p>
+          </Modal.Content>
+          <Modal.Action passive onClick={() => setVisible(false)}>Cancel</Modal.Action>
+          <Modal.Action onClick={() => {
+            addBySearch();
+            setVisible(false);
+          }}>Confirm</Modal.Action>
+        </Modal>
       </NonSSRWrapper>
     </>
   );
