@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import CardComponent from "./components/card";
 import Head from "next/head";
 import HeaderComponent from "./components/header";
-import { JSONStringify } from "lib/tool";
 import NonSSRWrapper from "./utils/no-ssr-wrapper";
 import { dataModule } from "mincu-react";
 import { useMicroAppsStore } from "../stores/useMicroAppStore";
@@ -25,11 +24,11 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [linkCode, setLinkCode] = useState("");
   const userId = dataModule.userInfo.profile.entireProfile?.base_info?.xh ?? "";
-  // const userId = "5701119201"
+  // const userId = "5701119201";
 
-  const addBySearch = async () => {
-    try {
-      const response = await fetch("/api/fetchHidden", {
+  const addBySearch = () => {
+    const asyncFunction = async () => {
+      const fetchResponse = await fetch("/api/fetchHidden", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -37,17 +36,41 @@ export default function Home() {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("Error while fetching the microApp from the user.");
+      if (!fetchResponse.ok) {
+        const errorData = await fetchResponse.json();  // 解析响应的 body
+        throw new Error(errorData.error);  // 假设错误信息在 'error' 属性中
+      }
+      const data = await fetchResponse.json();
+
+      if (isLoading) {
+        throw new Error("Please wait until the current request has finished...");
       }
 
-      const data = await response.json();
-      handleAdd(data.microApp);
+      setIsLoading(true);
 
-    } catch (error) {
-      console.error(error);
-      // You may want to handle errors more gracefully here
+      const updateResponse = await fetch("/api/updateUserApp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId,
+          microAppId: data.microApp.id,
+          action: "add",
+        }),
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error("No content found");
+      }
+
+      setIsLoading(false);
+      return 'Successfully added';
     }
+
+    toast.promise(asyncFunction(), {
+      loading: 'Processing...',
+      success: (res) => res,
+      error: (err) => err.message
+    });
   };
 
   useEffect(() => {
@@ -80,7 +103,7 @@ export default function Home() {
           }),
         });
         if (!response.ok) {
-          throw new Error("Error while adding the microApp to the user.");
+          throw new Error("2222");
         }
         setIsLoading(false);
         return response;
