@@ -1,6 +1,7 @@
-import Link from "next/link";
-import { Button } from "@geist-ui/core";
 import { mincuCore, uiModule } from "mincu-react";
+
+import { Button } from "@geist-ui/core";
+import Link from "next/link";
 
 const isApp = mincuCore.isApp;
 

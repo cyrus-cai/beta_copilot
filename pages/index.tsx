@@ -1,14 +1,14 @@
-import { dataModule, mincuCore } from "mincu-react";
-import toast, { Toaster } from 'react-hot-toast';
+import { Button, Input, Spacer } from "@geist-ui/core";
+import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 
 import CardComponent from "./components/card";
 import Head from "next/head";
 import HeaderComponent from "./components/header";
-import { Inter } from "@next/font/google";
+import { JSONStringify } from "lib/tool";
 import NonSSRWrapper from "./utils/no-ssr-wrapper";
-import SearchComponent from "./components/search";
-import { useMicroAppsStore } from '../stores/useMicroAppStore';
+import { dataModule } from "mincu-react";
+import { useMicroAppsStore } from "../stores/useMicroAppStore";
 
 interface AppProps {
   id: number;
@@ -23,7 +23,32 @@ interface AppProps {
 export default function Home() {
   const { microApps, fetchMicroApps } = useMicroAppsStore();
   const [isLoading, setIsLoading] = useState(false);
+  const [linkCode, setLinkCode] = useState("");
   const userId = dataModule.userInfo.profile.entireProfile?.base_info?.xh ?? "";
+  // const userId = "5701119201"
+
+  const addBySearch = async () => {
+    try {
+      const response = await fetch("/api/fetchHidden", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          linkCode,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error while fetching the microApp from the user.");
+      }
+
+      const data = await response.json();
+      handleAdd(data.microApp);
+
+    } catch (error) {
+      console.error(error);
+      // You may want to handle errors more gracefully here
+    }
+  };
 
   useEffect(() => {
     if (!microApps.length) {
@@ -33,8 +58,12 @@ export default function Home() {
 
   async function handleAdd(microApp: AppProps) {
     if (isLoading) {
-      const notifyConflict = toast.error('please waiting until current request finished...');
-      { notifyConflict }
+      const notifyConflict = toast.error(
+        "please waiting until current request finished..."
+      );
+      {
+        notifyConflict;
+      }
       return;
     }
     setIsLoading(true);
@@ -44,9 +73,12 @@ export default function Home() {
         const response = await fetch("/api/updateUserApp", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId: userId, microAppId: microApp.id, action: "add" }),
+          body: JSON.stringify({
+            userId: userId,
+            microAppId: microApp.id,
+            action: "add",
+          }),
         });
-
         if (!response.ok) {
           throw new Error("Error while adding the microApp to the user.");
         }
@@ -54,9 +86,9 @@ export default function Home() {
         return response;
       })(),
       {
-        loading: 'Processing...',
-        success: 'Successful Added',
-        error: 'Add Failed',
+        loading: "Processing...",
+        success: "Successful Added",
+        error: "Add Failed",
       }
     );
   }
@@ -71,7 +103,12 @@ export default function Home() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <HeaderComponent />
-        <SearchComponent />
+        <Input
+          placeholder="Scale 1"
+          onChange={(e) => setLinkCode(e.target.value)}
+        />{" "}
+        <Spacer h={0.5} />
+        <Button onClick={addBySearch}>Add</Button>
         {microApps.map((data: AppProps) => (
           <CardComponent
             key={data.id}

@@ -18,6 +18,18 @@ model MicroApp {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   status      Int      @default(1)
+  links       Link[] // 反向关系字段
+
+  @@unique([name, url])
+}
+
+model Link {
+  id       Int      @id @default(autoincrement())
+  appId    Int
+  linkCode String   @unique
+  microApp MicroApp @relation(fields: [appId], references: [id]) // 关系字段
+
+  @@unique([appId, linkCode])
 }
 
 model User {

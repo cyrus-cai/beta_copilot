@@ -1,11 +1,11 @@
-import toast, { Toaster } from 'react-hot-toast';
-import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 import { Button } from "@geist-ui/core";
 import CardComponent from "./components/card";
 import HeaderComponent from "./components/header";
 import { dataModule } from "mincu-react";
-import { useMicroAppsStore } from '../stores/useMicroAppStore';
+import { useEffect } from "react";
+import { useMicroAppsStore } from "../stores/useMicroAppStore";
 
 interface AppProps {
   id: number;
@@ -19,6 +19,8 @@ interface AppProps {
 
 const Mine = () => {
   const userId = dataModule.userInfo.profile.entireProfile?.base_info?.xh;
+  // const userId = "5701119201";
+
 
   const { myMicroApps, fetchMyMicroApps, removeMicroApp } = useMicroAppsStore();
 
@@ -28,7 +30,11 @@ const Mine = () => {
         const response = await fetch("/api/updateUserApp", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId: userId, microAppId: microApp.id, action: "remove" }),
+          body: JSON.stringify({
+            userId: userId,
+            microAppId: microApp.id,
+            action: "remove",
+          }),
         });
 
         if (!response.ok) {
@@ -40,16 +46,12 @@ const Mine = () => {
         return response;
       })(),
       {
-        loading: 'Processing...',
-        success: 'Successful Removed',
-        error: 'Remove Failed',
+        loading: "Processing...",
+        success: "Successful Removed",
+        error: "Remove Failed",
       }
     );
   }
-
-  useEffect(() => {
-    console.log(myMicroApps);
-  }, [myMicroApps]);
 
   useEffect(() => {
     if (userId) {
@@ -72,7 +74,13 @@ const Mine = () => {
           handleRemove={() => handleRemove(data)}
         />
       ))}
-      <Button onClick={() => { console.log(userId) }}>test xh get</Button>
+      <Button
+        onClick={() => {
+          console.log(userId);
+        }}
+      >
+        test xh get
+      </Button>
       <Toaster />
     </div>
   );
