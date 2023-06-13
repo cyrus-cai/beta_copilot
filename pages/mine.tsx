@@ -18,9 +18,7 @@ interface AppProps {
 }
 
 const Mine = () => {
-  const userId = dataModule.userInfo.profile.entireProfile?.base_info?.xh;
-  // const userId = "5701119201";
-
+  const userId = process.env.NODE_ENV === "development" ? "" : dataModule.userInfo.profile.entireProfile?.base_info?.xh;
 
   const { myMicroApps, fetchMyMicroApps, removeMicroApp } = useMicroAppsStore();
 
