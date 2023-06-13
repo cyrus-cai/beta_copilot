@@ -1,6 +1,9 @@
-import { GeistProvider, CssBaseline } from "@geist-ui/core";
-import { AppProps } from "next/app";
+import '../styles/globals.css'
+
+import { CssBaseline, GeistProvider } from "@geist-ui/core";
 import React, { useEffect } from "react";
+
+import { AppProps } from "next/app";
 
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
