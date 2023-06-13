@@ -7,15 +7,15 @@ interface CardProps {
   url: String;
   AppStatus: number;
   createdAt?: String;
+  existed?: boolean;
   handleAdd?: () => Promise<void>;
   handleRemove?: () => Promise<void>;
 }
 
 const CardComponent: React.FC<CardProps> = ({
-  imageSrc,
   title,
   description,
-  AppStatus,
+  existed,
   handleAdd,
   handleRemove,
 }) => {
@@ -34,6 +34,12 @@ const CardComponent: React.FC<CardProps> = ({
       <Text type="secondary" small>
         {description}
       </Text>
+      {
+        existed && <Card.Footer>
+          <Button auto type="abort" disabled scale={0.35} onClick={handleAdd}>
+            Already Added
+          </Button>
+        </Card.Footer>}
       {handleAdd && <Card.Footer>
         <Button auto type="success" scale={0.35} onClick={handleAdd}>
           Add to My Space
