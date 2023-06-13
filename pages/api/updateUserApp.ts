@@ -8,10 +8,17 @@ const updateUserAppHandler = async (req: NextApiRequest, res: NextApiResponse) =
   const { userId, microAppId, action } = req.body;
 
   try {
-    const user = await prisma.user.findUnique({ where: { userId: userId } });
-    let microApps = user?.microApp ?? [];
+    // Use upsert to find or create the user
+    const user = await prisma.user.upsert({
+      where: { userId: userId },
+      update: {},
+      create: { userId: userId, microApp: action === "add" ? [microAppId] : [] },
+    });
 
-    if (action === "add") {
+    let microApps = user.microApp ?? [];
+
+    if (action === "add" && !microApps.includes(microAppId)) {
+      // Only add the microAppId if it's not already in the array
       microApps.push(microAppId);
     } else if (action === "remove") {
       microApps = microApps.filter(id => id !== microAppId);
@@ -32,6 +39,5 @@ const updateUserAppHandler = async (req: NextApiRequest, res: NextApiResponse) =
     await prisma.$disconnect();
   }
 };
-
 
 export default updateUserAppHandler;

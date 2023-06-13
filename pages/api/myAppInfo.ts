@@ -19,7 +19,6 @@ const myAppInfoHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   if (!user) {
-    res.status(404).json({ message: "User not found" });
     return;
   }
 
@@ -31,7 +30,6 @@ const myAppInfoHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     },
   });
-
   console.log(allMyMicroApps);
   res.json(allMyMicroApps);
 };
